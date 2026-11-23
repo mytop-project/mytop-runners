@@ -3,7 +3,9 @@ package dev.droidtop.shared.runners
 import dev.droidtop.shared.containers.ContainerArch
 import dev.droidtop.shared.containers.Translator
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class LaunchTest {
@@ -69,5 +71,17 @@ class LaunchTest {
     fun aGameWithNoLinuxBinariesHasNoLaunch() {
         assertNull(RenPyLinuxLaunch.choose(listOf("py2-windows-x86_64", "py2-mac-universal"), arm, Translator.FEX))
         assertNull(RenPyLinuxLaunch.choose(listOf("py3-linux-armv7l"), arm, Translator.FEX))
+    }
+
+    @Test
+    fun anOlderRenPyBuildWithoutThePythonPrefixRunsTheSameWay() {
+        // Bare Witness 0.5 on the console: lib/linux-x86_64 and lib/linux-i686, its launcher reading lib/$RENPY_PLATFORM.
+        val launch = RenPyLinuxLaunch.choose(listOf("linux-i686", "linux-x86_64", "python2.7", "windows-x86_64"), ContainerArch.ARM64, Translator.FEX)!!
+        assertEquals(ContainerArch.X86_64, launch.arch)
+        assertEquals("linux-x86_64", launch.platform)
+        assertTrue(RenPyLinuxLaunch.isLinuxLibFolder("linux-x86_64"))
+        assertTrue(RenPyLinuxLaunch.isLinuxLibFolder("py3-linux-x86_64"))
+        assertFalse(RenPyLinuxLaunch.isLinuxLibFolder("python2.7"))
+        assertFalse(RenPyLinuxLaunch.isLinuxLibFolder("windows-x86_64"))
     }
 }

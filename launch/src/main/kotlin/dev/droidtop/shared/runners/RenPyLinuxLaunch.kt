@@ -7,8 +7,9 @@ import dev.droidtop.shared.containers.Translator
  * How a Ren'Py game's own Linux launcher (`<Game>.sh`) is started in a container (droidtop docs/SPEC.md 3c).
  *
  * The launcher picks `lib/<python>-<platform>` from `uname -m`, which on an arm64 device finds nothing in a PC build:
- * those ship `py2-linux-x86_64` and `py2-linux-i686` (Ren'Py 7) or `py3-linux-x86_64` (Ren'Py 8), and only some
- * builds add `linux-aarch64`. The launcher itself takes two variables, read from Ren'Py 7.6.1's script:
+ * those ship `py2-linux-x86_64` and `py2-linux-i686` (Ren'Py 7.4 on) or `py3-linux-x86_64` (Ren'Py 8), older ones
+ * `linux-x86_64` and `linux-i686` with no Python prefix (Bare Witness 0.5), and only some builds add an aarch64 folder.
+ * Both launcher generations read `RENPY_PLATFORM` as `linux-<arch>` and find their folder from it. The launcher itself takes two variables, read from Ren'Py 7.6.1's script:
  * `RENPY_PLATFORM` names the folder, and `RENPY_GDB` is a command it puts in front of the game's binary
  * (`exec $RENPY_GDB "$LIB/$BASEFILE"`). So droidtop runs the game's own script, choosing the folder from what the game
  * ships and putting the translator in `RENPY_GDB`; it never rewrites or reimplements the launcher.
@@ -29,7 +30,11 @@ data class RenPyLinuxLaunch(
         }
 
     companion object {
-        private val FOLDER = Regex("^py[23]-linux-([a-z0-9_]+)$")
+        private val FOLDER = Regex("^(?:py[23]-)?linux-([a-z0-9_]+)$")
+
+        /** Whether [name], a folder in a Ren'Py game's `lib/`, holds Linux binaries for an architecture Ren'Py builds. */
+        fun isLinuxLibFolder(name: String): Boolean =
+            FOLDER.matchEntire(name)?.groupValues?.get(1)?.let { archOf(it) } != null
 
         /** Ren'Py's names for the architectures it builds Linux binaries for. */
         private fun archOf(suffix: String): ContainerArch? = when (suffix) {
