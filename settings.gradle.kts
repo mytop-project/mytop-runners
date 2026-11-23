@@ -1,4 +1,4 @@
-rootProject.name = "lib-runners"
+rootProject.name = "mytop-runners"
 
 pluginManagement {
     repositories {

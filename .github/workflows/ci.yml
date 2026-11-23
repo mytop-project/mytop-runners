@@ -1,7 +1,7 @@
 name: CI
 
-# lib-runners' own tests. Programs that pin it (droidtop as vendor/lib-runners) build it in their own CI; adding
-# their builds here, as lib-net does, follows once a program pins it (Droidtop/tracker#960 step 1.1, task 5).
+# mytop-runners' own tests. Programs that pin it (droidtop as vendor/mytop-runners) build it in their own CI; adding
+# their builds here, as mytop-net does, follows once a program pins it (mytop-project/tracker#960 step 1.1, task 5).
 on:
   push:
     branches: [main, "ci/**"]

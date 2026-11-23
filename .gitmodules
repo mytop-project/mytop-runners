@@ -1,3 +1,3 @@
-[submodule "vendor/lib-containers"]
-	path = vendor/lib-containers
-	url = https://github.com/Droidtop/lib-containers
+[submodule "vendor/mytop-containers"]
+	path = vendor/mytop-containers
+	url = https://github.com/mytop-project/mytop-containers

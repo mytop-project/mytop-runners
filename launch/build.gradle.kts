@@ -15,8 +15,8 @@ kotlin {
 
 sourceSets {
     main {
-        // A container's architecture and translator (Droidtop/lib-containers :arch, pinned as vendor/lib-containers).
-        kotlin.srcDir("../vendor/lib-containers/arch/src/main/kotlin")
+        // A container's architecture and translator (mytop-project/mytop-containers :arch, pinned as vendor/mytop-containers).
+        kotlin.srcDir("../vendor/mytop-containers/arch/src/main/kotlin")
     }
 }
 
